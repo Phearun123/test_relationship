@@ -13,5 +13,21 @@ spring:
         format_sql:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: google-client-id
+            client-secret: google-client-secret
+
+#security:
+#  user:
+#    name: user
+#    password: 12345
+
 server:
   port: 2000
+
+
