@@ -3,6 +3,7 @@ package com.example.test_relationship.domain.book;
 import com.example.test_relationship.domain.author.Author;
 import com.example.test_relationship.domain.category.Category;
 import com.example.test_relationship.domain.photo.Photo;
+import com.example.test_relationship.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;

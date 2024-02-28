@@ -1,4 +1,4 @@
-package com.example.test_relationship.config.logging;
+package com.example.test_relationship.logging;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

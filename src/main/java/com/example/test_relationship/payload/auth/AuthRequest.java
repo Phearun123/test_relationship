@@ -8,8 +8,8 @@ public record AuthRequest(
 
         @NotBlank
         @Size(max = 50)
-        @JsonProperty("user_id")
-        String userId,
+        @JsonProperty("username")
+        String username,
 
         @NotBlank
         @Size(max = 50)

@@ -1,6 +1,6 @@
 package com.example.test_relationship.common.utils;
 
-import com.example.test_relationship.config.logging.AppLogManager;
+import com.example.test_relationship.logging.AppLogManager;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

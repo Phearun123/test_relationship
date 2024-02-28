@@ -1,16 +1,21 @@
 package com.example.test_relationship.service.auth;
 
 import com.example.test_relationship.common.api.StatusCode;
+import com.example.test_relationship.components.security.UserAuthenticationProvider;
 import com.example.test_relationship.domain.role.Role;
 import com.example.test_relationship.domain.user.User;
 import com.example.test_relationship.domain.user.UserRepository;
 import com.example.test_relationship.exception.BusinessException;
 import com.example.test_relationship.payload.auth.AuthRequest;
+import com.example.test_relationship.payload.user.SecurityUser;
 import com.example.test_relationship.payload.user.UserRequest;
+import com.example.test_relationship.payload.user.UserResponse;
 import com.example.test_relationship.utils.PasswordUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +25,23 @@ public class AuthServiceImpl implements AuthService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserAuthenticationProvider authProvider;
+    private final TokenService tokenService;
 
     @Override
     public Object login(AuthRequest payload) throws Throwable {
-        return null;
+
+        Authentication authentication = authProvider.authenticate(payload.username(), payload.password());
+
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = tokenService.generateToken(securityUser);
+
+        return new UserResponse(token, "Bearer", tokenService.getExpireIn());
     }
 
-    @Transactional
     @Override
     public void signup(UserRequest payload) throws Throwable {
         var findUser = userRepository.findUserByUserName(payload.username());

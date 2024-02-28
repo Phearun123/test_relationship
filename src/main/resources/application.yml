@@ -19,13 +19,23 @@ spring:
       client:
         registration:
           google:
-            client-id: google-client-id
-            client-secret: google-client-secret
+            clientId: 195943884556-mv35bhkp11mej5ukctc0d2t1fr4fpu1a.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
 
-#security:
-#  user:
-#    name: user
-#    password: 12345
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
+
+jwt:
+  expiration: 1d
+
+password:
+  encryption:
+    #    key: mysecret
+    key: mytestkeyasdddds
 
 server:
   port: 2000
