@@ -1,5 +1,6 @@
 package com.example.test_relationship.service.book;
 
+import com.example.test_relationship.common.api.StatusCode;
 import com.example.test_relationship.domain.author.Author;
 import com.example.test_relationship.domain.author.AuthorRepository;
 import com.example.test_relationship.domain.book.Book;
@@ -8,6 +9,10 @@ import com.example.test_relationship.domain.category.Category;
 import com.example.test_relationship.domain.category.CategoryRepository;
 import com.example.test_relationship.domain.photo.Photo;
 import com.example.test_relationship.domain.photo.PhotoRepository;
+import com.example.test_relationship.domain.user.User;
+import com.example.test_relationship.domain.user.UserRepository;
+import com.example.test_relationship.exception.BusinessException;
+import com.example.test_relationship.helper.AuthHelper;
 import com.example.test_relationship.payload.book.BookRequest;
 import com.example.test_relationship.payload.photo.PhotoRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +22,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +33,7 @@ public class BookServiceImpl implements BookService{
     private final PhotoRepository photoRepository;
     private final AuthorRepository authorRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Object getAllBooks() {
@@ -41,6 +48,10 @@ public class BookServiceImpl implements BookService{
     @Override
     public void createBook(BookRequest payload) throws Throwable {
 
+        Optional<User> userId = userRepository.findByUserId(AuthHelper.getUserId());
+        if (userId.isEmpty()) {
+            throw new BusinessException(StatusCode.USER_NOT_FOUND);
+        }
 
         var authors = payload.authors().stream().map(
                 author -> Author.builder()
@@ -107,13 +118,6 @@ public class BookServiceImpl implements BookService{
                         .urlSmall(payload.photos().urlSmall()).build());
         bookId.setCategories(categories);
         bookId.setAuthors(authors);
-//        bookId.setAuthors(authorRepository.findAuthorById().stream()
-//                .map(author -> Author.builder()
-//                        .firstName(author.getFirstName())
-//                        .lastName(author.getLastName())
-//                        .birthDate(author.getBirthDate())
-//                        .build()
-//                ).collect(Collectors.toList()));
 
         bookRepository.save(bookId);
     }
