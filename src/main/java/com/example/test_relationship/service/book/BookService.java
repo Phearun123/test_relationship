@@ -12,4 +12,6 @@ public interface BookService {
     void createBook(BookRequest payload) throws Throwable;
 
     void updateBook(Long id, BookRequest payload);
+
+    Object deleteBookById(Long id);
 }
